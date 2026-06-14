@@ -77,7 +77,6 @@ class InicialSeeder extends Seeder
         Usuario::updateOrCreate(
             ['email_usu' => 'carlosjarandilla12@gmail.com'],
             [
-                'cod_usuarios'  => 'USU004',
                 'nom_usu'       => 'Carlos',
                 'app_usu'       => 'Jarandilla',
                 'apm_usu'       => 'Quisbert',
