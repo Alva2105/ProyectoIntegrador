@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('seguimientos', function (Blueprint $table) {
             $table->string('cod_seg', 10)->primary();
-            $table->unsignedInteger('cod_solicitudes_seg');   // cambiado a unsignedInteger
-            $table->string('cod_usuarios_seg');
+            $table->string('cod_solicitudes_seg', 10);
+            $table->string('cod_usuarios_seg', 10);
             $table->timestamp('fcs_seg')->useCurrent();
             $table->string('tit_seg', 100)->nullable();
             $table->text('obs_seg')->nullable();
