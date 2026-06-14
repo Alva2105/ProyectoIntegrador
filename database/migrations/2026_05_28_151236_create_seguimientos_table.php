@@ -9,12 +9,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('seguimientos', function (Blueprint $table) {
-            $table->string('cod_seg', 10)->primary();         // SEG001, SEG002... (trigger)
-            $table->string('cod_solicitudes_seg', 10);        // FK → solicitudes
-            $table->string('cod_usuarios_seg');               // FK → usuarios (técnico)
-            $table->timestamp('fcs_seg')->useCurrent();       // fecha y hora del seguimiento
-            $table->string('tit_seg', 100)->nullable();       // título opcional
-            $table->text('obs_seg')->nullable();              // observaciones del avance
+            $table->string('cod_seg', 10)->primary();
+            $table->unsignedInteger('cod_solicitudes_seg');   // cambiado a unsignedInteger
+            $table->string('cod_usuarios_seg');
+            $table->timestamp('fcs_seg')->useCurrent();
+            $table->string('tit_seg', 100)->nullable();
+            $table->text('obs_seg')->nullable();
             $table->timestamps();
 
             $table->foreign('cod_solicitudes_seg')
