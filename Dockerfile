@@ -1,16 +1,16 @@
-FROM php:8.3-cli
+FROM php:8.4-cli
 
 # Instalar extensiones necesarias
-RUN apt-get update && apt-get install -y \
-    git curl zip unzip libpq-dev libonig-dev libxml2-dev libgd-dev \
+RUN apt-get update --fix-missing && apt-get install -y \
+    git curl zip unzip libpq-dev libonig-dev libxml2-dev \
     && docker-php-ext-install pdo pdo_pgsql mbstring xml opcache sodium
 
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Instalar Node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs --fix-missing
 
 WORKDIR /app
 COPY . .
