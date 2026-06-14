@@ -14,6 +14,7 @@ use App\Http\Controllers\Services\TipoMantenimientoController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\RegistroController;
 use App\Http\Controllers\AsignacionController;
+use App\Http\Controllers\SeguimientoDashboardController;
 
 /* ============================================================
     RUTAS PÚBLICAS
@@ -178,7 +179,7 @@ Route::middleware(['auth'])->group(function () {
     // Editar repuestos de un seguimiento
     Route::get   ('/seguimiento/{cod_seg}/repuestos',        [TecnicoController::class, 'editarRepuestos'])
         ->name('tecnico.seguimiento.repuestos');
-    Route::put   ('/seguimiento/{cod_seg}/repuestos',        [TecnicoController::class, 'actualizarRepuestos'])
+    Route::post   ('/seguimiento/{cod_seg}/repuestos/update',        [TecnicoController::class, 'actualizarRepuestos'])
         ->name('tecnico.seguimiento.repuestos.update');
 
     // Borrado lógico
@@ -293,6 +294,14 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/asignaciones/guardar', [AsignacionController::class, 'guardar'])->name('asignaciones.guardar');
             Route::get('/asignaciones/solicitud/{id}', [AsignacionController::class, 'porSolicitud'])->name('asignaciones.porSolicitud');
         });
+
+            Route::prefix('dashboard/seguimientos')->group(function () {
+                Route::get('/',                  [SeguimientoDashboardController::class, 'index'])->name('dashboard.seguimientos');
+                Route::get('/reporte',           [SeguimientoDashboardController::class, 'reporte'])->name('seguimientos.reporte');
+                Route::get('/{cod_seg}/detalle', [SeguimientoDashboardController::class, 'detalle'])->name('dashboard.seguimientos.detalle');
+                Route::post('/{cod_seg}/eliminar',  [SeguimientoDashboardController::class, 'eliminar'])->name('dashboard.seguimientos.eliminar');
+                Route::post('/{cod_seg}/restaurar', [SeguimientoDashboardController::class, 'restaurar'])->name('dashboard.seguimientos.restaurar');
+            });
     });
 
 });

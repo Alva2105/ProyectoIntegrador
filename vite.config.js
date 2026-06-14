@@ -25,6 +25,7 @@ export default defineConfig({
                 'resources/css/inventarioTabla.css',
                 'resources/css/listadoSolicitudes.css',
                 'resources/css/reportesTecnicos.css',
+                'resources/css/tablon-seguimiento.css',
             ],
             refresh: true,
         }),

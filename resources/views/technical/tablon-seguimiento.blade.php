@@ -16,6 +16,10 @@
 
 @extends('layouts.slidebarTecnico')
 
+@push('styles')
+    @vite('resources/css/tablon-seguimiento.css')
+@endpush
+
 @section('title', 'Técnico | Seguimiento')
 
 @section('content')
@@ -82,13 +86,13 @@
                     <div class="nota-acciones">
                         <button class="nota-btn nota-btn-edit"
                             title="Editar"
-                            onclick="event.stopPropagation(); abrirModalEditar(this.closest('.nota'))">
+                            onclick="abrirModalEditar(this.closest('.nota'))">
                             <span class="material-symbols-outlined">edit</span>
                         </button>
 
                         <button class="nota-btn nota-btn-delete"
                             title="Eliminar"
-                            onclick="event.stopPropagation(); abrirModalEliminar(this.closest('.nota'))">
+                            onclick="abrirModalEliminar(this.closest('.nota'))">
                             <span class="material-symbols-outlined">delete</span>
                         </button>
                     </div>
@@ -188,7 +192,7 @@
 ════════════════════════════════════════════════════════ --}}
 <div id="modalSeguimiento" class="jhire-modal" style="display:none;">
     <div class="jhire-modal-content" onclick="event.stopPropagation()">
-        <button class="jhire-close" onclick="cerrarModal('modalSeguimiento')">✖</button>
+        <button class="jhire-close" onclick="cerrarModalLocal('modalSeguimiento')">✖</button>
         <h2>Detalle del Seguimiento</h2>
         <div class="input-box">
             <label>Fecha:</label>
@@ -202,7 +206,7 @@
             <label>Repuestos solicitados:</label>
             <div id="segRepuestos" class="seg-repuestos-list"></div>
         </div>
-        <button class="btn-guardar" onclick="cerrarModal('modalSeguimiento')">Cerrar</button>
+        <button class="btn-guardar" onclick="cerrarModalLocal('modalSeguimiento')">Cerrar</button>
     </div>
 </div>
 
@@ -211,7 +215,7 @@
 ════════════════════════════════════════════════════════ --}}
 <div id="modalEditar" class="jhire-modal" style="display:none;">
     <div class="jhire-modal-content jhire-modal-lg" onclick="event.stopPropagation()">
-        <button class="jhire-close" onclick="cerrarModal('modalEditar')">✖</button>
+        <button class="jhire-close" onclick="cerrarModalLocal('modalEditar')">✖</button>
         <h2 style="margin-bottom:4px;">Editar Repuestos</h2>
         <p style="color:#888;font-size:13px;margin-bottom:18px;" id="editSubtitulo">—</p>
 
@@ -241,15 +245,13 @@
         </div>
         <p id="editError" style="color:#ef4444;font-size:13px;margin-top:8px;display:none;"></p>
 
-        <div style="display:flex;gap:10px;margin-top:20px;">
-            <button class="btn-guardar" style="flex:1;" onclick="guardarEdicion()">
+        <div class="modal-btns">
+            <button class="btn-guardar" onclick="guardarEdicion()">
                 <span class="material-symbols-outlined"
                     style="font-size:16px;vertical-align:middle;">save</span>
                 Guardar cambios
             </button>
-            <button class="btn-guardar"
-                style="flex:0 0 auto;background:#555;padding:11px 18px;"
-                onclick="cerrarModal('modalEditar')">
+            <button class="btn-cancelar-modal" onclick="cerrarModalLocal('modalEditar')">
                 Cancelar
             </button>
         </div>
@@ -489,17 +491,24 @@ function agregarRepuestoNuevo() {
 function guardarEdicion() {
     mostrarError('');
 
-    // Leer cantidades actuales del DOM (por si el usuario cambió sin disparar onchange)
+    // Leer qtys del DOM solo si los elementos existen
     document.querySelectorAll('.edit-rep-fila').forEach(fila => {
-        const idx = parseInt(fila.dataset.idx);
-        const qty = parseInt(fila.querySelector('.edit-rep-qty').value) || 1;
+        const idx     = parseInt(fila.dataset.idx);
+        const input   = fila.querySelector('.edit-rep-qty');
+        if (!input) return;                          // ← guard
+        const qty = parseInt(input.value) || 1;
         if (editState.repuestos[idx]) editState.repuestos[idx].qty = qty;
     });
 
+    const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+    if (!csrfMeta) {
+        mostrarError('Error: no se encontró el token CSRF.');
+        return;
+    }
+
     const payload = {
-        _method:    'PUT',
-        _token:     document.querySelector('meta[name="csrf-token"]').content,
-        obs_seg:    document.getElementById('editObs').value,
+        _token:     csrfMeta.content,
+        obs_seg:    document.getElementById('editObs')?.value ?? '',
         eliminados: editState.eliminados,
         repuestos:  editState.repuestos.map(r => ({
             cod_rep: r.cod_rep,
@@ -508,25 +517,39 @@ function guardarEdicion() {
         })),
     };
 
-    fetch(`/seguimiento/${editState.cod_seg}/repuestos`, {
+    fetch(`/seguimiento/${editState.cod_seg}/repuestos/update`, {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload),
+        headers: {
+            'Content-Type':     'application/json',
+            'Accept':           'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify(payload),
     })
-    .then(r => r.json())
+    .then(async r => {
+        const text = await r.text();
+        try {
+            return JSON.parse(text);
+        } catch(e) {
+            throw new Error('Respuesta no es JSON: ' + text.slice(0, 200));
+        }
+    })
     .then(data => {
         if (data.ok) {
-            cerrarModal('modalEditar');
-            location.reload(); // refresca el tablón con los datos actualizados
+            cerrarModalLocal('modalEditar');
+            location.reload();
         } else {
             mostrarError(data.error || 'Error al guardar.');
         }
     })
-    .catch(() => mostrarError('Error de conexión.'));
+    .catch(err => {
+        mostrarError('Error de red: ' + err.message);
+    });
 }
 
 function mostrarError(msg) {
     const el = document.getElementById('editError');
+    if (!el) return;
     el.textContent = msg;
     el.style.display = msg ? 'block' : 'none';
 }
@@ -553,14 +576,24 @@ function ejecutarRestaurarSeg() { document.getElementById('formRestaurarSeg').su
 
 // ── Helpers ───────────────────────────────────────────────
 function abrirModal(id)       { document.getElementById(id).style.display = 'flex'; }
-function cerrarModal(id)      { document.getElementById(id).style.display = 'none'; }
+function cerrarModalLocal(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+}
 function mostrarOverlay(id)   { document.getElementById(id).style.display = 'flex'; }
 function ocultarOverlay(id)   { document.getElementById(id).style.display = 'none'; }
 
 // ── Click en cuerpo de nota → abrir modal ver ─────────────
 document.querySelectorAll('.nota').forEach(nota => {
     nota.addEventListener('click', function(e) {
-        if (!e.target.closest('.nota-acciones')) abrirNota(this);
+        // Si el click viene de un botón o de .nota-acciones, ignorar
+        if (e.target.tagName === 'BUTTON' || 
+            e.target.tagName === 'SPAN' ||
+            e.target.closest('.nota-btn') || 
+            e.target.closest('.nota-acciones')) {
+            return;
+        }
+        abrirNota(this);
     });
 });
 
@@ -573,15 +606,17 @@ document.querySelectorAll('.nota').forEach(nota => {
 
 // ── Cerrar jhire-modals con click en el fondo ─────────────
 ['modalSeguimiento', 'modalEditar'].forEach(id => {
-    document.getElementById(id).addEventListener('click', function(e) {
-        if (e.target === this) cerrarModal(id);
-    });
+    const el = document.getElementById(id);
+    if (el) {
+        el.addEventListener('click', function(e) {
+            if (e.target === this) cerrarModalLocal(id);
+        });
+    }
 });
 
-// ── ESC cierra todo ───────────────────────────────────────
 document.addEventListener('keydown', e => {
     if (e.key !== 'Escape') return;
-    ['modalSeguimiento', 'modalEditar'].forEach(cerrarModal);
+    ['modalSeguimiento', 'modalEditar'].forEach(cerrarModalLocal);
     cerrarModalConfirmarEliminar();
     cerrarModalRestaurar();
 });

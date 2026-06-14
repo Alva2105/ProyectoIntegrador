@@ -25,8 +25,8 @@
         </div>
         <!-- ICONO DE PERFIL -->
         <div class="user-icon">
-            <div class="profile-icon">
-                @auth
+            @auth
+                <div class="profile-icon">
                     <div class="dropdown">
                         <button type="button" class="logout-btn" id="userMenuBtn" title="Menú de usuario">
                             @php
@@ -42,7 +42,6 @@
                                 {!! file_get_contents(public_path('assets/img/icons/profile-circle.svg')) !!}
                                 <span>Mi Perfil</span>
                             </a>
-
                             <form id="logout-form" action="{{ route('logout') }}" method="POST">
                                 @csrf
                                 <button type="submit" class="dropdown-item btn-logout flex items-center gap-2">
@@ -52,14 +51,15 @@
                             </form>
                         </div>
                     </div>
-                @else
-                    @if (Route::has('login'))
-                        <a href="{{ route('login') }}" class="login-icon-btn" title="Iniciar Sesión">
-                            <img src="{{ asset('assets/img/icons/profile.png') }}" alt="Iniciar Sesión" class="login-icon">
-                        </a>
-                    @endif
-                @endauth
-            </div>
+                </div>
+            @else
+                @if (Route::has('login'))
+                    <a href="{{ route('login') }}" class="btn-login-header">
+                        <span class="material-symbols-outlined">login</span>
+                        Iniciar Sesión
+                    </a>
+                @endif
+            @endauth
         </div>  
 
     </div>
@@ -297,6 +297,37 @@
         
         .btn-registro-vehiculo.activo::after {
             width: 100%;
+        }
+
+        /* Botón Iniciar Sesión (solo para invitados) */
+        .btn-login-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #fff;
+            font-family: 'Sansation', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            text-decoration: none;
+            padding: 10px 22px;
+            border: 2px solid #fff;
+            border-radius: 8px;
+            background: transparent;
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+            letter-spacing: 0.5px;
+            margin-right: 20px;
+        }
+
+        .btn-login-header:hover {
+            background: #fff;
+            color: #e35d00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.25);
+        }
+
+        .btn-login-header .material-symbols-outlined {
+            font-size: 22px;
         }
     </style>
     <script>

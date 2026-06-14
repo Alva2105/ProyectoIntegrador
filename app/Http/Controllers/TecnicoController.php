@@ -166,12 +166,23 @@ class TecnicoController extends Controller
 
         try {
             // 1. Crear el seguimiento
-            $seguimiento = Seguimiento::create([
+            // DESPUÉS
+            Seguimiento::create([
                 'cod_solicitudes_seg' => $request->cod_sol,
                 'cod_usuarios_seg'    => $tecnico->cod_usuarios,
                 'fcs_seg'             => now(),
                 'obs_seg'             => $request->obs_avance,
             ]);
+
+            // Recuperar el registro recién insertado directamente desde BD
+            $seguimiento = Seguimiento::where('cod_solicitudes_seg', $request->cod_sol)
+                ->where('cod_usuarios_seg', $tecnico->cod_usuarios)
+                ->latest('created_at')
+                ->first();
+
+            if (!$seguimiento || !$seguimiento->cod_seg) {
+                throw new \Exception('No se pudo recuperar el seguimiento tras la inserción.');
+            }
 
             // 2. Registrar repuestos si se enviaron
             $reqRepuestos = $request->input('repuestos', []);
@@ -334,6 +345,7 @@ public function actualizarRepuestos(Request $request, $cod_seg)
     abort_if(in_array($seg->solicitud->est_sol, ['Finalizado', 'Cancelado']), 403);
 
     $request->validate([
+        'obs_seg'                => 'nullable|string|max:1000',
         'repuestos'              => 'nullable|array',
         'repuestos.*.cod_rep'    => 'required|string|exists:repuestos,cod_repuestos',
         'repuestos.*.qty'        => 'required|integer|min:1',
@@ -345,6 +357,8 @@ public function actualizarRepuestos(Request $request, $cod_seg)
     DB::beginTransaction();
 
     try {
+        $seg->obs_seg = $request->input('obs_seg');
+        $seg->save();
         // 1. Procesar eliminados → devolver stock
         foreach ($request->input('eliminados', []) as $codSR) {
             if (!$codSR) continue;
