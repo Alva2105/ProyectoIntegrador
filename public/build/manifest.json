@@ -1,0 +1,161 @@
+{
+  "public/assets/img/generales/Deporivo Amarillo.png": {
+    "file": "assets/Deporivo Amarillo-CBIqlp6z.png",
+    "src": "public/assets/img/generales/Deporivo Amarillo.png"
+  },
+  "public/assets/img/generales/Deportivo_Naranja.jpg": {
+    "file": "assets/Deportivo_Naranja-DDgx1g1Y.jpg",
+    "src": "public/assets/img/generales/Deportivo_Naranja.jpg"
+  },
+  "public/assets/img/generales/Mantenimiento Correctivo.png": {
+    "file": "assets/Mantenimiento Correctivo-BGIuma5Z.png",
+    "src": "public/assets/img/generales/Mantenimiento Correctivo.png"
+  },
+  "public/assets/img/generales/Mantenimiento Preventivo.png": {
+    "file": "assets/Mantenimiento Preventivo-BTIP0Z_Y.png",
+    "src": "public/assets/img/generales/Mantenimiento Preventivo.png"
+  },
+  "public/assets/img/generales/background-matelicGray.jpg": {
+    "file": "assets/background-matelicGray-DTJPahdY.jpg",
+    "src": "public/assets/img/generales/background-matelicGray.jpg"
+  },
+  "public/assets/img/generales/fondoError.jpg": {
+    "file": "assets/fondoError-DkPeGS90.jpg",
+    "src": "public/assets/img/generales/fondoError.jpg"
+  },
+  "public/assets/img/generales/fondo_inv.png": {
+    "file": "assets/fondo_inv-sQMfXlcm.png",
+    "src": "public/assets/img/generales/fondo_inv.png"
+  },
+  "public/assets/img/generales/pizarra-corcho.jpg": {
+    "file": "assets/pizarra-corcho-BRplMfiD.jpg",
+    "src": "public/assets/img/generales/pizarra-corcho.jpg"
+  },
+  "public/assets/img/generales/taller.png": {
+    "file": "assets/taller-CDC68KZp.png",
+    "src": "public/assets/img/generales/taller.png"
+  },
+  "public/assets/img/icons/nota.png": {
+    "file": "assets/nota-CDVmJ9Lz.png",
+    "src": "public/assets/img/icons/nota.png"
+  },
+  "resources/css/detalleSolicitud.css": {
+    "file": "assets/detalleSolicitud-CJBKv_AC.css",
+    "src": "resources/css/detalleSolicitud.css",
+    "isEntry": true
+  },
+  "resources/css/detallesReportes.css": {
+    "file": "assets/detallesReportes-DdwUGGJg.css",
+    "src": "resources/css/detallesReportes.css",
+    "isEntry": true
+  },
+  "resources/css/detallesRepuestos.css": {
+    "file": "assets/detallesRepuestos-3SK0x-32.css",
+    "src": "resources/css/detallesRepuestos.css",
+    "isEntry": true
+  },
+  "resources/css/grafico.css": {
+    "file": "assets/grafico-LEzTSmCc.css",
+    "src": "resources/css/grafico.css",
+    "isEntry": true
+  },
+  "resources/css/inventarioTabla.css": {
+    "file": "assets/inventarioTabla-DsP80ZxI.css",
+    "src": "resources/css/inventarioTabla.css",
+    "isEntry": true
+  },
+  "resources/css/listadoSolicitudes.css": {
+    "file": "assets/listadoSolicitudes-BMnNrsoM.css",
+    "src": "resources/css/listadoSolicitudes.css",
+    "isEntry": true
+  },
+  "resources/css/reportesTecnicos.css": {
+    "file": "assets/reportesTecnicos-BUwmecOH.css",
+    "src": "resources/css/reportesTecnicos.css",
+    "isEntry": true
+  },
+  "resources/css/solicitud.css": {
+    "file": "assets/solicitud-CdzXTjJZ.css",
+    "src": "resources/css/solicitud.css",
+    "isEntry": true
+  },
+  "resources/css/tablon-seguimiento.css": {
+    "file": "assets/tablon-seguimiento-CoATiFov.css",
+    "src": "resources/css/tablon-seguimiento.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-CWCFBmTO.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "resources/js/solicitud.js"
+    ]
+  },
+  "resources/js/dashboard/buscador.js": {
+    "file": "assets/buscador-o1j7mOO-.js",
+    "name": "buscador",
+    "src": "resources/js/dashboard/buscador.js",
+    "isEntry": true
+  },
+  "resources/js/dashboard/buscadorMantenimientos.js": {
+    "file": "assets/buscadorMantenimientos-siYlL5y7.js",
+    "name": "buscadorMantenimientos",
+    "src": "resources/js/dashboard/buscadorMantenimientos.js",
+    "isEntry": true
+  },
+  "resources/js/dashboard/buscadorVehiculos.js": {
+    "file": "assets/buscadorVehiculos-KRSJ6rgA.js",
+    "name": "buscadorVehiculos",
+    "src": "resources/js/dashboard/buscadorVehiculos.js",
+    "isEntry": true
+  },
+  "resources/js/inventario/abrirDetalles.js": {
+    "file": "assets/abrirDetalles-CZ7g0Q2L.js",
+    "name": "abrirDetalles",
+    "src": "resources/js/inventario/abrirDetalles.js",
+    "isEntry": true
+  },
+  "resources/js/inventario/cantRepuesto.js": {
+    "file": "assets/cantRepuesto-BQzKwyU3.js",
+    "name": "cantRepuesto",
+    "src": "resources/js/inventario/cantRepuesto.js",
+    "isEntry": true
+  },
+  "resources/js/inventario/grafico.js": {
+    "file": "assets/grafico-8KAo1dIT.js",
+    "name": "grafico",
+    "src": "resources/js/inventario/grafico.js",
+    "isEntry": true
+  },
+  "resources/js/reportes/buscadorClientes.js": {
+    "file": "assets/buscadorClientes-CCcwLdsf.js",
+    "name": "buscadorClientes",
+    "src": "resources/js/reportes/buscadorClientes.js",
+    "isEntry": true
+  },
+  "resources/js/reportes/buscadorTecnicos.js": {
+    "file": "assets/buscadorTecnicos-D0Eq90jJ.js",
+    "name": "buscadorTecnicos",
+    "src": "resources/js/reportes/buscadorTecnicos.js",
+    "isEntry": true
+  },
+  "resources/js/solicitud.js": {
+    "file": "assets/solicitud-Bmq6olJZ.js",
+    "name": "solicitud",
+    "src": "resources/js/solicitud.js",
+    "isEntry": true
+  },
+  "resources/js/solicitud/detalleSolicitud.js": {
+    "file": "assets/detalleSolicitud-DmaoGgtQ.js",
+    "name": "detalleSolicitud",
+    "src": "resources/js/solicitud/detalleSolicitud.js",
+    "isEntry": true
+  },
+  "resources/sass/app.scss": {
+    "file": "assets/app-Bl3i6AtL.css",
+    "src": "resources/sass/app.scss",
+    "isEntry": true
+  }
+}
