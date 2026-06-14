@@ -1,8 +1,9 @@
-FROM php:8.4-cli
+FROM php:8.4-fpm
 
-RUN apt-get update --fix-missing && apt-get install -y \
+RUN apt-get update && apt-get install -y \
     git curl zip unzip libpq-dev libonig-dev libxml2-dev libsodium-dev \
-    && docker-php-ext-install pdo pdo_pgsql mbstring xml opcache sodium
+    && docker-php-ext-install pdo pdo_pgsql mbstring xml opcache \
+    && pecl install sodium || docker-php-ext-enable sodium
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -12,12 +13,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 WORKDIR /app
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader --ignore-platform-req=ext-sodium
 RUN npm install && npm run build
-
-RUN php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache
 
 EXPOSE 8000
 CMD php artisan serve --host=0.0.0.0 --port=$PORT
