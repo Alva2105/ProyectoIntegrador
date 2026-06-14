@@ -18,7 +18,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('solicitudes', function (Blueprint $table) {
-            $table->increments('cod_solicitudes');
+            $table->string('cod_solicitudes', 10)->primary();
             $table->date('fec_sol')->default(DB::raw('CURRENT_DATE'));
             $table->text('obs_sol')->nullable();
             $table->string('tma_sol', 20);     // PREVENTIVO | CORRECTIVO
