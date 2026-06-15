@@ -21,6 +21,7 @@ class Mantenimiento extends Model
         'total_man',
         'deleted_at',
         'restored_at',
+        'cod_facturas_man',
     ];
 
     protected $casts = [
@@ -93,5 +94,10 @@ class Mantenimiento extends Model
             'cod_mantenimientos',
             'cod_repuestos'
         )->withPivot('cantidad', 'pre_uni');
+    }
+
+    public function factura()
+    {
+        return $this->belongsTo(Factura::class, 'cod_facturas_man', 'cod_facturas');
     }
 }

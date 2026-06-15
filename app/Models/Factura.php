@@ -41,6 +41,11 @@ class Factura extends Model
     {
         return $this->hasMany(Pago::class, 'cod_facturas_pag', 'cod_facturas');
     }
+
+    public function mantenimiento()
+    {
+        return $this->hasOne(Mantenimiento::class, 'cod_facturas_man', 'cod_facturas');
+    }
  
     /**
      * Total calculado sumando los detalles (cantidad × precio unitario).

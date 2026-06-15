@@ -15,6 +15,7 @@ use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\RegistroController;
 use App\Http\Controllers\AsignacionController;
 use App\Http\Controllers\SeguimientoDashboardController;
+use App\Http\Controllers\FacturaController;
 
 /* ============================================================
     RUTAS PÚBLICAS
@@ -274,6 +275,7 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/{id}/orden/servicio/{codServicio}', [MantenimientoController::class, 'eliminarServicioOrden'])->name('mantenimientos.orden.servicio.eliminar');
             Route::delete('/{id}/orden/repuesto/{codRepuesto}', [MantenimientoController::class, 'eliminarRepuestoOrden'])->name('mantenimientos.orden.repuesto.eliminar');
             Route::get('/reporte', [MantenimientoController::class, 'reporte'])->name('mantenimientos.reporte');
+            Route::get('/{id}/facturar', [MantenimientoController::class, 'irAFacturar'])->name('mantenimientos.facturar');
         });
 
         /* --- Solicitudes --- */
@@ -295,13 +297,21 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/asignaciones/solicitud/{id}', [AsignacionController::class, 'porSolicitud'])->name('asignaciones.porSolicitud');
         });
 
-            Route::prefix('dashboard/seguimientos')->group(function () {
-                Route::get('/',                  [SeguimientoDashboardController::class, 'index'])->name('dashboard.seguimientos');
-                Route::get('/reporte',           [SeguimientoDashboardController::class, 'reporte'])->name('seguimientos.reporte');
-                Route::get('/{cod_seg}/detalle', [SeguimientoDashboardController::class, 'detalle'])->name('dashboard.seguimientos.detalle');
-                Route::post('/{cod_seg}/eliminar',  [SeguimientoDashboardController::class, 'eliminar'])->name('dashboard.seguimientos.eliminar');
-                Route::post('/{cod_seg}/restaurar', [SeguimientoDashboardController::class, 'restaurar'])->name('dashboard.seguimientos.restaurar');
-            });
+        Route::prefix('seguimientos')->group(function () {
+            Route::get('/',                  [SeguimientoDashboardController::class, 'index'])->name('dashboard.seguimientos');
+            Route::get('/reporte',           [SeguimientoDashboardController::class, 'reporte'])->name('seguimientos.reporte');
+            Route::get('/{cod_seg}/detalle', [SeguimientoDashboardController::class, 'detalle'])->name('dashboard.seguimientos.detalle');
+            Route::post('/{cod_seg}/eliminar',  [SeguimientoDashboardController::class, 'eliminar'])->name('dashboard.seguimientos.eliminar');
+            Route::post('/{cod_seg}/restaurar', [SeguimientoDashboardController::class, 'restaurar'])->name('dashboard.seguimientos.restaurar');
+        });
+
+        /* --- Facturas --- */
+        Route::prefix('facturas')->group(function () {
+            Route::get('/{cod}/crear',  [FacturaController::class, 'crear'])   ->name('facturas.crear');
+            Route::post('/{cod}/guardar', [FacturaController::class, 'guardar']) ->name('facturas.guardar');
+            Route::get('/ver/{cod}',    [FacturaController::class, 'ver'])     ->name('facturas.ver');
+        });
+
     });
 
 });

@@ -504,7 +504,13 @@
             </div>
         </div>
 
-        <div style="display:flex;justify-content:flex-end;margin-top:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;">
+ 
+            {{-- Botón Facturar (visible solo si NO tiene factura aún) --}}
+            <div id="ver_acciones_fac">
+                {{-- Se rellena dinámicamente por JS con verOrden() --}}
+            </div>
+        
             <button class="btn-cancelar-modal" onclick="cerrarVerOrden()">Cerrar</button>
         </div>
     </div>
@@ -701,6 +707,27 @@
 .btn-reporte:hover { background:#ff7b00; color:#fff; }
 #tablaPapelera tbody tr { opacity:0.8; }
 #tablaPapelera tbody tr:hover { opacity:1; }
+
+.btn-facturar {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #1a3a26; color: #4caf50;
+    border: 1px solid #2d6a3a;
+    padding: 8px 18px; border-radius: 6px;
+    text-decoration: none; font-size: 13px; font-weight: 600;
+    transition: all 0.2s;
+}
+.btn-facturar:hover { background: #28a745; color: #fff; border-color: #28a745; }
+ 
+.btn-ver-factura {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: transparent; color: #17a2b8;
+    border: 1px solid #17a2b8;
+    padding: 8px 18px; border-radius: 6px;
+    text-decoration: none; font-size: 13px; font-weight: 600;
+    transition: all 0.2s;
+}
+.btn-ver-factura:hover { background: #17a2b8; color: #fff; }
+
 </style>
 
 <script>
@@ -860,6 +887,26 @@ async function verOrden(cod) {
 
         document.getElementById('ver_loading').style.display   = 'none';
         document.getElementById('ver_contenido').style.display = '';
+
+        const accionesFac = document.getElementById('ver_acciones_fac');
+        if (data.factura_emitida) {
+            // Ya tiene factura → mostrar enlace para verla
+            accionesFac.innerHTML = `
+                <a href="/dashboard/facturas/${data.cod_factura}"
+                class="btn-ver-factura"
+                target="_blank">
+                    <span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;">receipt_long</span>
+                    Ver factura #${data.nro_factura}
+                </a>`;
+        } else {
+            // Sin factura → botón para emitirla
+            accionesFac.innerHTML = `
+                <a href="/dashboard/mantenimientos/${cod}/facturar"
+                class="btn-facturar">
+                    <span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;">receipt_long</span>
+                    Emitir factura
+                </a>`;
+        }
 
     } catch(e) {
         mostrarAviso('⚠️ Error al cargar la orden', 'error');
