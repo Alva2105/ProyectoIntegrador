@@ -307,9 +307,11 @@ Route::middleware(['auth'])->group(function () {
 
         /* --- Facturas --- */
         Route::prefix('facturas')->group(function () {
-            Route::get('/{cod}/crear',  [FacturaController::class, 'crear'])   ->name('facturas.crear');
+            Route::get('/',               [FacturaController::class, 'listar'])  ->name('dashboard.facturas');
+            Route::get('/{cod}/crear',    [FacturaController::class, 'crear'])   ->name('facturas.crear');
             Route::post('/{cod}/guardar', [FacturaController::class, 'guardar']) ->name('facturas.guardar');
-            Route::get('/ver/{cod}',    [FacturaController::class, 'ver'])     ->name('facturas.ver');
+            Route::get('/ver/{cod}',      [FacturaController::class, 'ver'])     ->name('facturas.ver');
+            Route::get('/reporte',        [FacturaController::class, 'reporte'])->name('facturas.reporte');
         });
 
     });

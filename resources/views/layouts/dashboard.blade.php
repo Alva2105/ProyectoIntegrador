@@ -101,6 +101,14 @@
                         </li>
                     </ul>
                 </li>
+
+                {{-- === Facturas === --}}
+                <li>
+                    <a href="{{ route('dashboard.facturas') }}"
+                    class="{{ request()->is('dashboard/facturas*') ? 'active' : '' }}">
+                        <i class="material-symbols-outlined">receipt_long</i> Facturas
+                    </a>
+                </li>
             </ul>
         </nav>
  

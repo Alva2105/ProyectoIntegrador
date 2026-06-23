@@ -141,14 +141,17 @@ class MantenimientoController extends Controller
         });
 
         $repuestos = $m->repuestos->map(function ($rep) {
+            $pre = (float) $rep->pivot->pre_uni;
+            if ($pre == 0) {
+                $pre = (float) $rep->pre_rep;
+            }
             return [
                 'cod'      => $rep->cod_repuestos,
                 'nom'      => $rep->nom_rep,
-                'cantidad' => $rep->pivot->cantidad,
-                'pre_uni'  => (float) ($rep->pivot->pre_uni ?? $rep->pre_rep),
+                'cantidad' => (int) $rep->pivot->cantidad,
+                'pre_uni'  => $pre,
             ];
         });
-
         return response()->json([
             'cliente'     => $cliente ? "{$cliente->nom_cli} {$cliente->app_cli}" : '—',
             'telefono'    => $cliente?->tel_cli ?? '—',
@@ -437,5 +440,19 @@ class MantenimientoController extends Controller
 
         Mantenimiento::where('cod_mantenimientos', $id)
             ->update(['total_man' => $totalServicios + $totalRepuestos]);
+    }
+
+    public function irAFacturar($id)
+    {
+        $mantenimiento = Mantenimiento::findOrFail($id);
+
+        if ($mantenimiento->factura) {
+            return redirect()
+                ->route('facturas.ver', $mantenimiento->factura->cod_facturas)
+                ->with('info', 'Este mantenimiento ya tiene la factura #'
+                    . $mantenimiento->factura->nfa_fac . '.');
+        }
+
+        return redirect()->route('facturas.crear', $id);
     }
 }
